@@ -1,0 +1,70 @@
+
+
+PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:     <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:      <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:      <http://www.w3.org/2002/07/owl#>
+PREFIX swrl:     <http://www.w3.org/2003/11/swrl#>
+PREFIX swrlb:    <http://www.w3.org/2003/11/swrlb#>
+PREFIX vitro:    <http://vitro.mannlib.cornell.edu/ns/vitro/0.7#>
+PREFIX bibo:     <http://purl.org/ontology/bibo/>
+PREFIX c4o:      <http://purl.org/spar/c4o/>
+PREFIX cito:     <http://purl.org/spar/cito/>
+PREFIX event:    <http://purl.org/NET/c4dm/event.owl#>
+PREFIX fabio:    <http://purl.org/spar/fabio/>
+PREFIX foaf:     <http://xmlns.com/foaf/0.1/>
+PREFIX geo:      <http://aims.fao.org/aos/geopolitical.owl#>
+PREFIX obo:      <http://purl.obolibrary.org/obo/>
+PREFIX ocrer:    <http://purl.org/net/OCRe/research.owl#>
+PREFIX ocresd:   <http://purl.org/net/OCRe/study_design.owl#>
+PREFIX skos:     <http://www.w3.org/2004/02/skos/core#>
+PREFIX vcard:    <http://www.w3.org/2006/vcard/ns#>
+PREFIX vitro-public: <http://vitro.mannlib.cornell.edu/ns/vitro/public#>
+PREFIX vivo:     <http://vivoweb.org/ontology/core#>
+PREFIX scires:   <http://vivoweb.org/ontology/scientific-research#>
+PREFIX fo: <http://www.w3.org/1999/XSL/Format#>
+
+
+SELECT  DISTINCT ?NombreInvestigador ?Puesto
+WHERE {
+  
+
+    # 1 .- Se obtienen las posiciones de la dependencia y las de la SEP
+
+    # Todos los recursos de la clase "Position" que se relacionan con la dependencia
+    ?Positions a vivo:Position;
+             vivo:relates [URI_DEPENDENCIA].
+    
+    #Todos los recursos de la clase "Position" relacionados con la URI de la SEP
+    ?PositionsSNI a vivo:Position;
+                vivo:relates  <http://orbis.uaslp.mx/vivo/individual/n3332>.
+
+
+    # 2.- Se obtienen todos los investigadores relacionados con la dependencia
+
+
+    # Todas las tripletas en las que la Posicion en la dependencia se relacionen mediante la propiedad "relates"
+	?Positions vivo:relates ?Investigador.
+    # De las tripletas anteriores, todas aquellas en la que la clase relacionada sea "FacultyMember" 
+	?Investigador a vivo:FacultyMember.
+
+
+
+    # 3.- Se Hace la relacion de los investigadores con las "Positions" de la SEP
+
+    # Las tripletas en la que la URI de la SEP se relacione con alguno de los investigadores
+    ?PositionsSNI vivo:relates ?Investigador.
+
+
+    # 4.- Se vacian el nombre y puesto en las variables que regresará la consulta
+
+    # Se obtiene el nombre del investigador de la propiedad "label"
+  	?Investigador rdfs:label ?NombreInvestigador.
+    # Se obtiene el nombramiento asignado en la Posicion
+    ?PositionsSNI rdfs:label ?Puesto.
+			
+  
+} 
+
+
+
