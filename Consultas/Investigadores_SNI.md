@@ -5,6 +5,11 @@ Obtiene los nombres de los investigadores que tienen algun Nivel SNI de una depe
 
 ![grafo](img/Positions.png)
 
+Se van a seleccionar el nombre del investigador y el puesto o "Position". Por ejemplo SNI Nivel 1, SNI Nivel 2. Etc. 
+``` sparql
+SELECT  DISTINCT ?NombreInvestigador ?Puesto
+WHERE 
+```
 ### 1.  Se obtienen las posiciones de la dependencia y las de la SEP
 
 Todos los recursos de la clase "Position" que se relacionan con la dependencia.
