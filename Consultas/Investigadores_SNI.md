@@ -3,7 +3,7 @@ Obtiene los nombres de los investigadores que tienen algun Nivel SNI de una depe
 
 ## Los nodos involucrados en esta consulta y sus relaciones
 
-![grafo](/img/Positions.png)
+![grafo](img/Positions.png)
 
 ### 1.  Se obtienen las posiciones de la dependencia y las de la SEP
 
