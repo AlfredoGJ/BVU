@@ -8,11 +8,13 @@ Obtiene los nombres de los investigadores que tienen algun Nivel SNI de una depe
 ### 1.  Se obtienen las posiciones de la dependencia y las de la SEP
 
 Todos los recursos de la clase "Position" que se relacionan con la dependencia.
-El texto **[URI_DEPENDENCIA]** deberá ser remplazado por la uri de la dependencia para hacer la consulta, para propositos prácticos se deja indicado en corchetes. 
+ 
    ``` sparql
 ?Positions a vivo:Position;
             vivo:relates [URI_DEPENDENCIA].
    ```
+El texto **[URI_DEPENDENCIA]** deberá ser remplazado por la **URI** especifica de la dependencia al momento de ejecutar la consulta, mientras tanto de deja indicado para identificarlo. 
+
 Todos los recursos de la clase "Position" relacionados con la URI de la SEP
 ```sparql
 ?PositionsSNI a vivo:Position;
