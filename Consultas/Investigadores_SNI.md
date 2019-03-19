@@ -1,4 +1,19 @@
-# Consulta Investigadores SNI
+# REPORTE DE INVESTIGADORES POR DEPENDENCIA
+Reporte detallado sobre los investigadores de cada dependencia de la UASLP, así como las actividades, nombramientos y reconocimientos de estos.
+
+**Este reporte contempla:**
+
+* a) Cuántos y quiénes son
+* b) Cuántos y quiénes son: PTC, Técnicos académicos, Responsables de laboratorios, etc.
+* c) Cuántos y quiénes son: SNI por niveles (Positions)
+* d) Cuántos y quiénes tienen Perfil Preferencial Prodep (Positions)
+* e) Investigadores por áreas temáticas (Apartado research áreas)
+* f) Cuántos y quiénes son maestros de postgrado  y en qué programas imparten materias
+* g) Cuántos y quiénes han dirigido cuáles tesis
+* h) Cuántos y quiénes han recibido distinciones (premios, reconocimientos, etc.)
+* i) Cuántos y quiénes han organizado o asistido a cursos, conferencias, tallereres, ect.
+
+
 Obtiene los nombres de los investigadores que tienen algun Nivel SNI de una dependencia dada.
 
 ## Los nodos involucrados en esta consulta y sus relaciones
