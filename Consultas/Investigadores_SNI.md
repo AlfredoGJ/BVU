@@ -14,6 +14,21 @@ Reporte detallado sobre los investigadores de cada dependencia de la UASLP, así
 * i) Cuántos y quiénes han organizado o asistido a cursos, conferencias, tallereres, ect.
 
 
+
+Para elaborar el reporte se elaboraron consultas en SPARQL para obtener los datos desde el sistema orbis (VIVO). Las consultas utilizados son:
+
+* Dependencias 
+* Investigadores Por Dependencia (a, b)
+* Investigadores SNI (c)
+* Investigadores PRODEP (d)
+* Areas Investigadores
+* Investigadores Imparten Posgrados (f)
+* Investigadores dirigen Tesis (g)
+* Premios Investigadores (h)
+* Investigadores Eventos (i)
+
+
+# Consulta Investigadores SNI
 Obtiene los nombres de los investigadores que tienen algun Nivel SNI de una dependencia dada.
 
 ## Los nodos involucrados en esta consulta y sus relaciones
