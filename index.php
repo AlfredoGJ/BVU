@@ -9,6 +9,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
     $resultado=consultaSPARQL($query,"");
     echo $resultado;
     
+    var_dump($resultado);
 }
 
 
@@ -36,7 +37,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
     </h1>
 
 
-    <a href="IXD.php" ><p> Investigadores por dependencia</p> </a>
+    <a href="/VBU/IXD.php" ><p> Investigadores por dependencia</p> </a>
     <form method="POST"   accept-charset="utf-8"  >
 
 

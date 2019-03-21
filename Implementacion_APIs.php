@@ -5,11 +5,22 @@
 function consultaSPARQL($consulta, $formato)
 {
 
-    $URL='http://localhost:8080/vivo/api/sparqlQuery';
+    $URL='http://localhost:8080/vivo/api/sparqlUpdate';
     $params= array();
     $params['email']= 'vivo_root@mydomain.edu';
     $params['password']= '123456';
-    $params['query']= $consulta;
+    $params['update']='
+    PREFIX rdfs:     <http://www.w3.org/2000/01/rdf-schema#>
+    
+    
+    INSERT DATA 
+    {
+       GRAPH <http://vitro.mannlib.cornell.edu/default/vitro-kb-2> { 
+        
+        <http://orbis.uaslp.mx/vivo/individual/n70532>
+        rdfs:label "Perez Juan "@es-ES.
+    
+    }}';
 
     // var_dump($params);
     $curl= curl_init($URL);

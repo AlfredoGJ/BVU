@@ -25,6 +25,8 @@ PREFIX fo: <http://www.w3.org/1999/XSL/Format#>
 
 SELECT  ?dependencia ?nombre
 WHERE {
+
+  # Trae el URI y el nombre de cada recurso del tipo "AcademicDepartment"
   ?dependencia a vivo:AcademicDepartment.
   ?dependencia  rdfs:label ?nombre
      
