@@ -29,6 +29,8 @@ Para elaborar el reporte se elaboraron consultas en SPARQL para obtener los dato
 * Investigadores Eventos (i)
 
 
+:warning: El texto **[URI_DEPENDENCIA]**  que aparece en algunas consultas deberá ser remplazado por la **URI** especifica de la dependencia al momento de ejecutar la consulta, mientras tanto de deja indicado para identificarlo.
+
 ## Consulta Dependencias
 
 Consulta sencilla para traer las URI's de las dependencias, este URI se usará en otras consultas para traer los datos de los investigadores de cada dependencia.
@@ -45,160 +47,118 @@ WHERE {
  ``` 
 
 ## Consulta Investigadores Por Dependencia
-Obtiene todos los investigadores de una dependencia dada
-
-## Consulta Investigadores SNI
-Obtiene los nombres de los investigadores que tienen algun Nivel SNI de una dependencia dada.
-
+Obtiene el nombre y nombramiento de todos los investigadores de una dependencia dada
 ```sparql
 SELECT  DISTINCT ?NombreInvestigador ?Puesto
 
 WHERE {
 
 # Todos los recursos de la clase "Position" que se relacionan con la dependencia
-
 ?Positions a  vivo:Position;
-
 vivo:relates [URI_DEPENDENCIA].
-
   
-
 # Todas las tripletas en las que la Posicion se relacionen mediante la propiedad "relates"
-
 ?Positions vivo:relates ?Relacion.
 
 # De las tripletas anteriores, todas aquellas en la que la clase relacionada sea "FacultyMember"
-
 ?Relacion a  vivo:FacultyMember.
 
 # Se obtiene el nombre del investigador de la propiedad "label"
-
 ?Relacion rdfs:label ?NombreInvestigador.
 
 # Se obtiene el nombramiento asignado en la Posicion
-
 ?Positions rdfs:label ?Puesto.
 
 }
 ```
+## Consulta Investigadores SNI
+Obtiene el nombre del investigador y el puesto ( "Position") de los investigadores SNI de una dependencia dada. Por ejemplo SNI Nivel 1, SNI Nivel 2. Etc.
+
+
 
 ### Los nodos involucrados en esta consulta y sus relaciones
 
 ![grafo](img/Positions.png)
 
-Se van a seleccionar el nombre del investigador y el puesto o "Position". Por ejemplo SNI Nivel 1, SNI Nivel 2. Etc. 
 ``` sparql
+ 
 SELECT  DISTINCT ?NombreInvestigador ?Puesto
 WHERE 
-```
-### 1.  Se obtienen las posiciones de la dependencia y las de la SEP
 
-Todos los recursos de la clase "Position" que se relacionan con la dependencia.
- 
-   ``` sparql
+# 1.  Se obtienen las posiciones de la dependencia y las de la SEP
+
+#Todos los recursos de la clase "Position" que se relacionan con la dependencia.  
 ?Positions a vivo:Position;
             vivo:relates [URI_DEPENDENCIA].
-   ```
-El texto **[URI_DEPENDENCIA]** deberá ser remplazado por la **URI** especifica de la dependencia al momento de ejecutar la consulta, mientras tanto de deja indicado para identificarlo. 
-
-Todos los recursos de la clase "Position" relacionados con la URI de la SEP
-```sparql
+   
+#Todos los recursos de la clase "Position" relacionados con la URI de la SEP
 ?PositionsSNI a vivo:Position;
             vivo:relates  <http://orbis.uaslp.mx/vivo/individual/n3332>.
-```
 
-### 2.- Se obtienen todos los investigadores relacionados con la dependencia
+# 2.- Se obtienen todos los investigadores relacionados con la dependencia
 
-
-Todas las tripletas en las que la Posicion en la dependencia se relacionen mediante la propiedad "relates"
-```sparql
+#Todas las tripletas en las que la Posicion en la dependencia 
+#se relacionen mediante la propiedad "relates"
 ?Positions vivo:relates ?Investigador.
-```
- De las tripletas anteriores, todas aquellas en la que la clase relacionada sea "FacultyMember" 
- ```sparql
+
+#De las tripletas anteriores, todas aquellas en la que la clase relacionada 
+# sea"FacultyMember" 
 ?Investigador a vivo:FacultyMember.
- ```
 
+# 3.- Se Hace la relacion de los investigadores con las "Positions" de la SEP
 
-### 3.- Se Hace la relacion de los investigadores con las "Positions" de la SEP
+#Las tripletas en la que la URI de la SEP se relacione con alguno de los investigadores
+# ?PositionsSNI vivo:relates ?Investigador.
 
-Las tripletas en la que la URI de la SEP se relacione con alguno de los investigadores
-```sparql
-?PositionsSNI vivo:relates ?Investigador.
-```
+# 4.- Se vacian el nombre y puesto en las variables que regresará la consulta
 
-### 4.- Se vacian el nombre y puesto en las variables que regresará la consulta
-
-Se obtiene el nombre del investigador de la propiedad "label"
-```sparql
+#Se obtiene el nombre del investigador de la propiedad "label"
 ?Investigador rdfs:label ?NombreInvestigador.
-```
-Se obtiene el nombramiento asignado en la Posicion
-```sparql
-?PositionsSNI rdfs:label ?Puesto.
-```	
 
+#Se obtiene el nombramiento asignado en la Posicion
+?PositionsSNI rdfs:label ?Puesto.	
+
+}
+```
 ## Consulta Investigadores PRODEP
 Obtiene los nombres de los investigadores de una dependencia dada que tienen perfil PRODEP.
 
 ```sparql
 SELECT  DISTINCT ?NombreInvestigador ?Puesto
 
-WHERE {
-
-  
+WHERE { 
 
 # 1 .- Se obtienen las posiciones de la dependencia y las de la SEP
 
-  
-
 # Todos los recursos de la clase "Position" que se relacionan con la dependencia
-
 ?Positions a  vivo:Position;
-
-vivo:relates [URI_DEPENDENCIA].
+	vivo:relates [URI_DEPENDENCIA].
 
 #Todos los recursos de la clase "Position" relacionados con la URI de la SEP
-
 ?PositionsSNI a  vivo:Position;
-
-vivo:relates  <http://orbis.uaslp.mx/vivo/individual/n2891>.
-
-  
-  
+vivo:relates  <http://orbis.uaslp.mx/vivo/individual/n2891>.  
 
 # 2.- Se obtienen todos los investigadores relacionados con la dependencia
-
   
-  
-
-# Todas las tripletas en las que la Posicion en la dependencia se relacionen mediante la propiedad "relates"
-
+# Todas las tripletas en las que la Posicion en la dependencia se relacionen 
+# mediante la propiedad "relates"
 ?Positions vivo:relates ?Investigador.
 
 # De las tripletas anteriores, todas aquellas en la que la clase relacionada sea "FacultyMember"
-
 ?Investigador a  vivo:FacultyMember. 
   
-
 # 3.- Se Hace la relacion de los investigadores con las "Positions" de la SEP
 
-  
-
 # Las tripletas en la que la URI de la SEP se relacione con alguno de los investigadores
-
 ?PositionsSNI vivo:relates ?Investigador.
-
   
-  
-
 # 4.- Se vacian el nombre y puesto en las variables que regresará la consulta
 
 # Se obtiene el nombre del investigador de la propiedad "label"
-
 ?Investigador rdfs:label ?NombreInvestigador.
 
 # Se obtiene el nombramiento asignado en la Posicion
-
 ?PositionsSNI rdfs:label ?Puesto.
+
+}
 ```
