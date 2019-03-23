@@ -235,6 +235,37 @@ FILTER(regex(?ProgLabel,"(Posgrado|Maestría|Doctorado)","i"))
 Obtiene los nombres de los investigadores de una dependencia dada y las tesis que han dirigido.
 
 ```sparql
+SELECT DISTINCT  ?Tesis  ?Investigador
+WHERE {
+  
+  # Todos los recursos de la clase "Position" que se relacionan con la dependencia
+  ?Positions a vivo:Position;
+             vivo:relates [URI_DEPENDENCIA].
+
+  # Todas las tripletas en las que la Posicion se relacionen mediante la propiedad "relates"
+  ?Positions vivo:relates ?Investigadores.
+    
+  # De las tripletas anteriores, todas aquellas en la que la clase relacionada sea "FacultyMember"
+  ?Investigadores a vivo:FacultyMember.
+    
+  # Todos los recursos del tipo "Thesis" y todos los que se relacionen con estas por la propiedad  "contributingRole"
+  # Se guardan en sus respectivas variables.
+  ?Tesiss a bibo:Thesis;
+         vivo:contributingRole ?Roles.
+  
+  # Se verifica que los roles sean del tipo "Reviewer Role" 
+  ?Roles a vivo:ReviewerRole.
+  
+  # Se buscan los Investigadores que esten relacionados con estos roles mediante la propiedad obo:RO_0000052 ("inheres in") 
+  ?Roles obo:RO_0000052 ?Investigadores.
+   
+  # Se obtiene el titulo de la tesis de la propiedad rdfs:label 
+  OPTIONAL{?Tesiss rdfs:label ?Tesis}
+  
+  # Se obtiene el nombre del investigador de la propiedad rdfs:label
+  OPTIONAL {?Investigadores rdfs:label ?Investigador}
+  
+}
 ```
 
 ##  Consulta Premios Investigadores
