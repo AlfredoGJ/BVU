@@ -1,0 +1,17 @@
+# nodejs
+bower_components/
+node_modules/
+node_tmp/
+node/
+npm.tar.gz
+
+# IntelliJ files
+*.iml
+.idea
+
+# eclipse files
+.settings/
+.project
+.classpath
+.externalToolBuilders/
+
