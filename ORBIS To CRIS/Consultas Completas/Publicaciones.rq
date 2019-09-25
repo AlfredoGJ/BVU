@@ -1,0 +1,129 @@
+PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:     <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:      <http://www.w3.org/2001/XMLSchema#>
+PREFIX swrlb:    <http://www.w3.org/2003/11/swrlb#>
+PREFIX bibo:     <http://purl.org/ontology/bibo/>
+PREFIX cito:     <http://purl.org/spar/cito/>
+PREFIX event:    <http://purl.org/NET/c4dm/event.owl#>
+PREFIX fabio:    <http://purl.org/spar/fabio/>
+PREFIX foaf:     <http://xmlns.com/foaf/0.1/>
+PREFIX geo:      <http://aims.fao.org/aos/geopolitical.owl#>
+PREFIX obo:      <http://purl.obolibrary.org/obo/>
+PREFIX ocrer:    <http://purl.org/net/OCRe/research.owl#>
+PREFIX ocresd:   <http://purl.org/net/OCRe/study_design.owl#>
+PREFIX skos:     <http://www.w3.org/2004/02/skos/core#>
+PREFIX vivo:     <http://vivoweb.org/ontology/core#>
+PREFIX scires:   <http://vivoweb.org/ontology/scientific-research#>
+PREFIX fo: <http://www.w3.org/1999/XSL/Format#>
+PREFIX bib: <http://zeitkunst.org/bibtex/0.1/bibtex.owl#>
+PREFIX sc: <http://purl.org/science/owl/sciencecommons/>
+PREFIX sci: <http://data.scientology.org/ns/>
+PREFIX bio: <http://purl.org/vocab/bio/0.1/>
+SELECT DISTINCT
+?Id
+?APISource
+?Title
+?Volume
+?Issue 
+?DOI
+?Abstract
+?ISSN
+?CODEN
+?URL
+?PubMedID
+?DocumentType 
+?Status 
+?EIDscopus 
+?Access
+?Keywords
+#(GROUP_CONCAT(?Keywords)AS ?All_Keywords )
+?AbstractLanguage
+?CitationLanguage
+?CitationType
+?CitationTitle
+?CopyrightInfo
+?DbCollection
+?DateDelivered
+?CopirightType
+?IdSource
+?Year 
+?PageStart
+?PageEnd
+?NumPages 
+?CiteNum
+?EIDscopus
+## Campos extra  en VIVO
+?ArtNo    
+?PublisherId
+?ISBN10
+?ISBN13  
+?ConferenceId 
+WHERE
+{
+  	?D a bibo:Document.
+  	#?D vivo:relatedBy ?AutorRol.
+  	?D rdfs:label ?Title.
+    # campos dummie para hacer coincidir formato con lo extraido de las API's
+    Bind("" as ?URL).
+    Bind("Orbis" as ?APISource).
+    Bind("" as ?AbstractLanguage).
+    Bind("" as ?CitationLanguage).
+    Bind("" as ?CitationType).
+    Bind("" as ?CitationTitle).
+    Bind("" as ?CopyrightInfo).
+    Bind("" as ?DbCollection).
+    Bind("" as ?DateDelivered).
+    Bind("" as ?CopirightType).
+    Bind("" as ?Keywords).
+    Bind("" as ?CiteNum).
+    BIND (REPLACE(STR(?D),"http://orbis.uaslp.mx/vivo/individual/","") AS ?Id)
+  	OPTIONAL {?D vivo:dateTimeValue ?año. ?año vivo:dateTime ?Year}
+   	OPTIONAL
+    {
+        ?D vivo:hasPublicationVenue ?Source. 
+         BIND(REPLACE(str(?Source),"http://orbis.uaslp.mx/vivo/individual/","") AS ?IdSource ).
+    }
+  	OPTIONAL {?D bibo:volume ?Volume.}
+  	OPTIONAL {?D bibo:issue ?Issue.}
+  	OPTIONAL {?D bibo:artnum ?ArtNo.}
+  	OPTIONAL {?D bibo:pageStart ?PageStart.}
+  	OPTIONAL {?D bibo:pageEnd ?PageEnd.}
+  	OPTIONAL {?D bibo:numPages ?NumPages.}
+  	OPTIONAL {?D bibo:doi ?DOI.}
+  	OPTIONAL {?D bibo:abstract ?Abstract.}
+  	OPTIONAL 
+    {
+      ?D vivo:publisher ?Publisher.
+      BIND(REPLACE(str(?Publisher),"http://orbis.uaslp.mx/vivo/individual/","") AS ?PublisherId ).
+    }
+  	OPTIONAL {?D bibo:issn ?ISSN.}
+   # OPTIONAL {?D vivo:freetextKeyword ?Keywords.}
+  OPTIONAL {?D bibo:coden ?CODEN.}
+	OPTIONAL{?D bibo:isbn10 ?ISBN10.?D bibo:isbn13 ?ISBN13 }
+  OPTIONAL{ ?D 	bibo:pmid ?PubMedID}
+  OPTIONAL{ ?D 	vivo:abbreviation ?AbbreviatedSourceTitle}
+  OPTIONAL{ ?D 	vivo:abbreviation ?AbbreviatedSourceTitle}
+  OPTIONAL{ ?D 	bibo:status ?S. ?S rdfs:label ?Status}
+  OPTIONAL{ ?D 	bibo:EIDscopus ?EIDscopus.}
+  ?D rdf:type ?Type.
+  filter not exists 
+  {
+    ?subtype ^a ?D;
+              rdfs:subClassOf ?Type.
+  }
+  BIND (REPLACE ( STR(?Type) ,"http://vivoweb.org/ontology/core#","") AS ?DT).
+  BIND (REPLACE ( STR(?DT) ,"http://purl.org/ontology/bibo/","") AS ?DocumentType).
+  FILTER (?DocumentType  IN ("Abstract"))  
+  OPTIONAL{?D scires:documentationFor ?AccessT. ?AccessT rdfs:label ?Access}
+  OPTIONAL{?D vivo:hasSubjectArea ?sa. ?sa rdfs:label ?soa}
+  OPTIONAL 
+  {
+    ?D bibo:presentedAt ?Conference. 
+    ?Conference a bibo:Conference.
+     BIND(REPLACE(str(?Conference),"http://orbis.uaslp.mx/vivo/individual/","") AS ?ConferenceId ).
+  }
+}ORDER BY ?DocumentType
+
+
+
+

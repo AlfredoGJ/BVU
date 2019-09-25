@@ -1,0 +1,63 @@
+PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:     <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:      <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:      <http://www.w3.org/2002/07/owl#>
+PREFIX swrl:     <http://www.w3.org/2003/11/swrl#>
+PREFIX swrlb:    <http://www.w3.org/2003/11/swrlb#>
+PREFIX vitro:    <http://vitro.mannlib.cornell.edu/ns/vitro/0.7#>
+PREFIX bibo:     <http://purl.org/ontology/bibo/>
+PREFIX c4o:      <http://purl.org/spar/c4o/>
+PREFIX cito:     <http://purl.org/spar/cito/>
+PREFIX event:    <http://purl.org/NET/c4dm/event.owl#>
+PREFIX fabio:    <http://purl.org/spar/fabio/>
+PREFIX foaf:     <http://xmlns.com/foaf/0.1/>
+PREFIX geo:      <http://aims.fao.org/aos/geopolitical.owl#>
+PREFIX obo:      <http://purl.obolibrary.org/obo/>
+PREFIX ocrer:    <http://purl.org/net/OCRe/research.owl#>
+PREFIX ocresd:   <http://purl.org/net/OCRe/study_design.owl#>
+PREFIX skos:     <http://www.w3.org/2004/02/skos/core#>
+PREFIX vcard:    <http://www.w3.org/2006/vcard/ns#>
+PREFIX vitro-public: <http://vitro.mannlib.cornell.edu/ns/vitro/public#>
+PREFIX vivo:     <http://vivoweb.org/ontology/core#>
+PREFIX scires:   <http://vivoweb.org/ontology/scientific-research#>
+PREFIX fo: <http://www.w3.org/1999/XSL/Format#>
+PREFIX ev: <http://www.w3.org/2001/xml-events/>
+
+
+SELECT DISTINCT ?Investigador ?Rol   ?Evento
+WHERE {
+  
+  
+       # Todos los recursos de la clase "Position" que se relacionan con la dependencia
+  	?Positions a vivo:Position;
+             vivo:relates [URI_DEPENDENCIA].
+
+       # Todas las tripletas en las que la Posicion se relacionen mediante la propiedad "relates"
+       ?Positions vivo:relates ?Investigadores.
+       # De las tripletas anteriores, todas aquellas en la que la clase relacionada sea "FacultyMember"
+       ?Investigadores a vivo:FacultyMember.
+       
+       # Todos los recuross del tipo "Role" (BFO_0000023) relacionados por la propiedad "inheres in" (RO_0000052) 
+       # con los investigadores, se guardan los eventos relacionados por la propiedad "relized in"(BFO_0000054) en ?Eventos
+       ?Roles ?p ?o;
+       a obo:BFO_0000023;
+       obo:RO_0000052 ?Investigadores;
+       obo:BFO_0000054 ?Eventos.
+    
+  
+       # Se filtran los Roles, se quedan unicamente los que sean Attendee Role, Organizer Role, Presenter
+       # Role, Service Provider Role.
+       {?Roles a   vivo:AttendeeRole.} 
+       UNION {?Roles a vivo:OrganizerRole.}
+       UNION{?Roles a vivo:PresenterRole. }
+       UNION {?Roles a obo:ERO_0000012.}
+       
+       
+       # Se obtienen las etiquetas de los investigadores, eventos y roles.
+       OPTIONAL { ?Investigadores rdfs:label ?Investigador.}
+       OPTIONAL { ?Roles rdfs:label ?Rol.}  
+       OPTIONAL { ?Eventos rdfs:label ?Evento.}
+       
+} 
+
+

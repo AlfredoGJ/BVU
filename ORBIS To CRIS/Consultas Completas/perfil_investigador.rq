@@ -1,0 +1,183 @@
+PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:     <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:      <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:      <http://www.w3.org/2002/07/owl#>
+PREFIX swrl:     <http://www.w3.org/2003/11/swrl#>
+PREFIX swrlb:    <http://www.w3.org/2003/11/swrlb#>
+PREFIX vitro:    <http://vitro.mannlib.cornell.edu/ns/vitro/0.7#>
+PREFIX bibo:     <http://purl.org/ontology/bibo/>
+PREFIX c4o:      <http://purl.org/spar/c4o/>
+PREFIX cito:     <http://purl.org/spar/cito/>
+PREFIX event:    <http://purl.org/NET/c4dm/event.owl#>
+PREFIX fabio:    <http://purl.org/spar/fabio/>
+PREFIX foaf:     <http://xmlns.com/foaf/0.1/>
+PREFIX geo:      <http://aims.fao.org/aos/geopolitical.owl#>
+PREFIX obo:      <http://purl.obolibrary.org/obo/>
+PREFIX ocrer:    <http://purl.org/net/OCRe/research.owl#>
+PREFIX ocresd:   <http://purl.org/net/OCRe/study_design.owl#>
+PREFIX skos:     <http://www.w3.org/2004/02/skos/core#>
+PREFIX vcard:    <http://www.w3.org/2006/vcard/ns#>
+PREFIX vitro-public: <http://vitro.mannlib.cornell.edu/ns/vitro/public#>
+PREFIX vivo:     <http://vivoweb.org/ontology/core#>
+PREFIX scires:   <http://vivoweb.org/ontology/scientific-research#>
+PREFIX fo: <http://www.w3.org/1999/XSL/Format#>
+PREFIX bio: <http://purl.org/vocab/bio/0.1/>
+PREFIX bib: <http://zeitkunst.org/bibtex/0.1/bibtex.owl#>
+PREFIX uaslp:  	<http://orbis.uaslp.mx/vivo/ontology/uaslp#>
+
+SELECT  DISTINCT
+(STRAFTER(STR(?Investigador),"http://orbis.uaslp.mx/vivo/individual/") AS ?Key_Investigador)
+?RPE
+?Nombre
+?Segundo_Nombre
+?Apellidos
+?Preferred_Title
+?Overview
+?Telefono_1
+?Telefono_2
+?Email_1
+?Email_2
+(STRAFTER(STR(?KeyAreaSNI),"http://orbis.uaslp.mx/vivo/individual/") AS ?Key_Area_SNI)
+# ?AreaSNI
+(STRAFTER(STR(?KeyAreaPRODEP),"http://orbis.uaslp.mx/vivo/individual/") AS ?Key_Area_PRODEP)
+# ?AreaPRODEP
+(STRAFTER(STR(?KeyDisciplinaSNI),"http://orbis.uaslp.mx/vivo/individual/") AS ?Key_Disciplina_SNI)
+# ?DisciplinaSNI
+(STRAFTER(STR(?KeyDisciplinaPRODEP),"http://orbis.uaslp.mx/vivo/individual/") AS ?Key_Disciplina_PRODEP)
+# ?DisciplinaPRODEP
+ (STRAFTER(STR(?KeyCampoSNI),"http://orbis.uaslp.mx/vivo/individual/") AS ?Key_Campo_SNI)
+ (STRAFTER(STR(?KeySubdisciplinaSNI),"http://orbis.uaslp.mx/vivo/individual/") AS ?Key_Subdisciplina_SNI)
+ (STRAFTER(STR(?KeyEspecialidadSNI),"http://orbis.uaslp.mx/vivo/individual/") AS ?Key_Especialidad_SNI)
+
+?Codigo_Postal
+?Pais
+?Estado
+?Localidad
+?Calle
+
+# (STRAFTER(STR(?Dependencia),"http://orbis.uaslp.mx/vivo/individual/") AS ?Key_Dependencia)
+#?NombreDependencia
+
+WHERE 
+{
+  ?Investigador ?p ?o;
+    a vivo:FacultyMember.
+  
+  OPTIONAL { ?Investigador uaslp:idrpe ?RPE }
+  # Tarjeta de contacto del investigador
+  ?Investigador obo:ARG_2000028 ?card.
+  
+  # Nodo nombre
+  ?card vcard:hasName ?name.
+  
+  # Primer nombre
+  ?name vcard:givenName ?Nombre.
+  # Segundo nombre
+  ?name vcard:familyName ?Apellidos.
+  # Tercer nombre
+  optional{?name vivo:middleName ?Segundo_Nombre.}
+  
+  optional
+  {
+  	?card vcard:hasTitle ?title.
+    ?title vcard:title ?Preferred_Title.
+  }
+  #Telefono
+  optional
+  {
+  	?card vcard:hasTelephone ?phone.
+  	?phone vcard:telephone ?Telefono1.
+  }
+
+  # Email 1 email de trabajo
+  OPTIONAL
+  {
+    ?card vcard:hasEmail ?email.
+    ?email  a vcard:Work. 
+    ?email vcard:email ?Email_1.
+  }
+ 
+ # Email 2 - email personal
+  OPTIONAL
+  {
+    ?card vcard:hasEmail ?email2.
+    FILTER NOT EXISTS {?email2 a vcard:Work}
+    ?email2 vcard:email ?Email_2.	
+  }
+  
+  OPTIONAL
+  {
+    ?Investigador vivo:hasResearchArea ?KeyAreaSNI.
+    ?KeyAreaSNI rdfs:label ?AreaSNI.
+    FILTER(REGEX(?AreaSNI,"Área.+?(?=SNI)" ,"i"))
+  }
+  
+  OPTIONAL
+  {
+    ?Investigador vivo:hasResearchArea ?KeyAreaPRODEP.
+    ?KeyAreaPRODEP rdfs:label ?AreaPRODEP.
+    FILTER(REGEX(?AreaPRODEP,"Área.+?(?=PRODEP)" ,"i"))
+  }
+
+ OPTIONAL
+  {
+    ?Investigador vivo:hasResearchArea ?KeyDisciplinaSNI.
+    ?KeyDisciplinaSNI rdfs:label ?DisciplinaSNI.
+    FILTER(REGEX(?DisciplinaSNI,"^Disciplina SNI" ,"i"))
+  }
+
+   OPTIONAL
+  {
+    ?Investigador vivo:hasResearchArea ?KeyDisciplinaPRODEP.
+    ?KeyDisciplinaPRODEP rdfs:label ?DisciplinaPRODEP.
+    FILTER(REGEX(?DisciplinaPRODEP,"Disciplina PRODEP" ,"i"))
+  }
+
+    OPTIONAL
+  {
+    ?Investigador vivo:hasResearchArea ?KeyCampoSNI.
+    ?KeyCampoSNI rdfs:label ?CampoSNI.
+	
+    FILTER(REGEX(?CampoSNI,"Campo SNI" ,"i"))
+  }
+
+    OPTIONAL
+  {
+    ?Investigador vivo:hasResearchArea ?KeySubdisciplinaSNI.
+    ?KeySubdisciplinaSNI rdfs:label ?SubdisciplinaSNI.
+    FILTER(REGEX(?SubdisciplinaSNI,"Subdisciplina SNI" ,"i"))
+  }
+
+    OPTIONAL
+  {
+    ?Investigador vivo:hasResearchArea ?KeyEspecialidadSNI.
+    ?KeyEspecialidadSNI rdfs:label ?EspecialidadSNI.
+    FILTER(REGEX(?EspecialidadSNI,"Especialidad SNI" ,"i"))
+  }
+
+  OPTIONAL 
+  {
+    ?card vcard:hasAddress ?address.
+    ?address vcard:country ?Pais.
+    ?address vcard:region ?Estado.
+    ?address vcard:locality ?Localidad.
+    ?address vcard:postalCode ?Codigo_Postal.
+    ?address vcard:streetAddress ?Calle.
+  }
+  
+OPTIONAL
+{
+  ?Investigador vivo:overview ?Overview.
+}
+
+OPTIONAL
+  {
+ 	?dependencia a vivo:AcademicDepartment.
+ 	?Positions a vivo:Position;
+             vivo:relates ?dependencia.
+ 	?Positions vivo:relates ?Investigador.
+ 	?dependencia  rdfs:label ?NombreDependencia.
+  }
+ 
+} 
+

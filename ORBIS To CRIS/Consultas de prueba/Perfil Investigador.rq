@@ -1,0 +1,90 @@
+PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:     <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd:      <http://www.w3.org/2001/XMLSchema#>
+PREFIX owl:      <http://www.w3.org/2002/07/owl#>
+PREFIX swrl:     <http://www.w3.org/2003/11/swrl#>
+PREFIX swrlb:    <http://www.w3.org/2003/11/swrlb#>
+PREFIX vitro:    <http://vitro.mannlib.cornell.edu/ns/vitro/0.7#>
+PREFIX bibo:     <http://purl.org/ontology/bibo/>
+PREFIX c4o:      <http://purl.org/spar/c4o/>
+PREFIX cito:     <http://purl.org/spar/cito/>
+PREFIX event:    <http://purl.org/NET/c4dm/event.owl#>
+PREFIX fabio:    <http://purl.org/spar/fabio/>
+PREFIX foaf:     <http://xmlns.com/foaf/0.1/>
+PREFIX geo:      <http://aims.fao.org/aos/geopolitical.owl#>
+PREFIX obo:      <http://purl.obolibrary.org/obo/>
+PREFIX ocrer:    <http://purl.org/net/OCRe/research.owl#>
+PREFIX ocresd:   <http://purl.org/net/OCRe/study_design.owl#>
+PREFIX skos:     <http://www.w3.org/2004/02/skos/core#>
+PREFIX vcard:    <http://www.w3.org/2006/vcard/ns#>
+PREFIX vitro-public: <http://vitro.mannlib.cornell.edu/ns/vitro/public#>
+PREFIX vivo:     <http://vivoweb.org/ontology/core#>
+PREFIX scires:   <http://vivoweb.org/ontology/scientific-research#>
+
+#
+# This example query gets 20 geographic locations
+# and (if available) their labels
+# 
+SELECT ?persona ?nombre  ?scopusid ?researcherId ?eraCommonsId ?overview ?email ?telephone ?geo 
+WHERE {
+  ?persona a foaf:Person.
+  ?persona rdfs:label ?nombre.
+  
+  OPTIONAL
+  {
+    ?persona vivo:scopusid ?scopusid.
+    ?persona vivo:researcherid ?researcherId.
+    ?persona vivo:eraCommonsId ?eraCommonsId.
+    ?persona vivo:overview ?overview.
+    
+  }
+ 
+	?persona obo:ARG_2000028 ?vcard. 
+
+    OPTIONAL
+    {
+        ?vcard vcard:hasTitle ?titleAux.
+        ?titleAux vcard:title ?title.
+
+        # vcard:Email
+        ?vcard vcard:hasEmail ?eAux.
+        ?eAux vcard:email ?email.
+        # vcard:Telephone
+        ?vcard vcard:hasTelephone ?tAux.
+        ?tAux vcard:telephone ?telephone.
+        # vcard:Geo 
+        ?vcard vcard:hasGeo ?geoAux.
+        ?geoAux vcard:geo ?geo.
+
+        # vcard:Name
+        ?vcard vcard:hasName ?nameAux.
+        ?nameAux vcard:givenName ?givenName.
+        ?nameAux vcard:givenName ?familyName.
+        ?NameAux vcard:givenName ?additionalName.
+        ?NameAux vcard:givenName ?honorificPrefix.
+        ?NameAux vcard:givenName ?honorificSuffix.
+
+        # vcard:URL
+        ?vcard vcard:hasURL ?urlAux.
+        ?urlAux vcard:url ?url.
+        ?urlAux vcard:rank ?rank.
+        ?urlAux vcard:label ?vcardUrLabel.
+
+
+
+
+
+
+
+
+    }
+  
+    
+  
+  
+  
+  
+   
+}
+
+
