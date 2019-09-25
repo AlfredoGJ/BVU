@@ -1,19 +1,3 @@
-# Archivos
-
-* :file_folder: PaginaPrincipalORBIS
-   * :file_folder:  **bubble-chart** : mover a :file_folder: **VIVO-WebbApp**/js
-  * :page_facing_up: **wilma.css** mover a :file_folder: **VIVO-WebbApp**/themes/wilma/css/
-  * :page_facing_up: **lib-home-page.ftl** mover a :file_folder: **VIVO-WebbApp**/templates/freemarker/lib/
-  * :page_facing_up: **homePageDataGetters.n3** mover a :file_folder: **VIVO-Home**/rdf/display/everytime/
-  *  :page_facing_up: **page-home.ftl** mover a :file_folder: **VIVO-WebApp**/themes/wilma/templates/
-
-```perl
-my $D2R_PATH="/d2rq-0.8.1/d2r-query";
-my $D2R_MAPPING_FILE_PATH="/d2rq-0.8.1/CRIS_Mapping.ttl";
-my $D2R_BASE_URI="http://localhost:2020";
-```
-
-
 # CRIS-To-ORBIS
 Es el modulo encargado de la transferencia de datos del sistema CRIS a la plataforma ORBIS, está basado en el uso de dos herramientas: la API **SarqlUpdate** y el modulo **d2r-Query** del software D2R-Server.
 
